@@ -5,7 +5,7 @@ namespace Mathyw {
 
 namespace {
 
-	bool allow_gl_terminate = false;
+	bool glfw_should_terminate = false;
 	struct GLFWManager {
 		GLFWManager();
 		~GLFWManager();
@@ -15,19 +15,19 @@ namespace {
 void InitGL()
 {
 	static GLFWManager instance;
-	allow_gl_terminate = true;
+	glfw_should_terminate = true;
 }
 
 void ExitGL()
 {
-	if (allow_gl_terminate)
+	if (glfw_should_terminate)
 		glfwTerminate();
-	allow_gl_terminate = false;
+	glfw_should_terminate = false;
 }
 
 GLFWManager::GLFWManager()
 {
-	glfwInit();
+	MATHYW_VERIFY(glfwInit(), "GLFW initialization failed");
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(

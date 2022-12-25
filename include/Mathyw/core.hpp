@@ -31,6 +31,24 @@
 #error unknown platform detected, only Windows, MacOS and Linux are supported
 #endif
 
+#if MATHYW_PLATFORM == MATHYW_WINDOWS
+#ifdef _DEBUG // MSVC Debug
+#define MATHYW_DEBUG 1
+#endif
+#elif MATHYW_PLATFORM == MATHYW_MACOS || MATHYW_PLATFORM == MATHYW_LINUX
+#ifdef __OPTIMIZE__ // GCC or clang Debug
+#define MATHYW_DEBUG 1
+#endif
+#endif
+
+#ifdef MATHYW_DEBUG // Minimal check on debug
+#define MATHYW_ASSERT(x, ...) if (!(x)) throw std::exception(__VA_ARGS__)
+#define MATHYW_VERIFY(x, ...) MATHYW_ASSERT(x, __VA_ARGS__)
+#else // No check on release
+#define MATHYW_ASSERT(x, ...)
+#define MATHYW_VERIFY(x, ...) x
+#endif
+
 // Mathyw C++ standard libraries dependencies
 #include <string>
 #include <array>
@@ -39,3 +57,12 @@
 #include <functional>
 #include <iostream>
 #include <type_traits>
+#include <cmath>
+
+namespace Mathyw {
+
+// Success if such type is an arithemtic type (primary data types)
+template<class Ty>
+concept ArithmeticType = std::is_arithmetic_v<Ty>;
+
+} // !Mathyw

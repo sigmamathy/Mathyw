@@ -7,7 +7,7 @@ add_library(${PROJECT_NAME}
     "external/glad/glad.c"
 # source files
     
- "src/opengl.cpp")
+ "src/opengl.cpp" )
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
 
