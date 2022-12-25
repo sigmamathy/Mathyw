@@ -213,7 +213,7 @@ constexpr auto operator*(Matrix<Ty1, R1, R2C1> const& mat1, Matrix<Ty2, R2C1, C2
 
 // Check if the matrix is a zero matrix
 template<class Ty, std::uint8_t R, std::uint8_t C>
-constexpr bool NtIsZero(Matrix<Ty, R, C> const& mat)
+constexpr bool IsZero(Matrix<Ty, R, C> const& mat)
 {
 	for (std::uint16_t i = 0u; i < R * C; i++)
 		if (mat[i] != Ty(0))
@@ -223,7 +223,7 @@ constexpr bool NtIsZero(Matrix<Ty, R, C> const& mat)
 
 // Hadmard product of matrices
 template<class Ty1, class Ty2, std::uint8_t R, std::uint8_t C>
-constexpr auto NtHadamard(Matrix<Ty1, R, C> const& mat1, Matrix<Ty2, R, C> const& mat2)
+constexpr auto Hadamard(Matrix<Ty1, R, C> const& mat1, Matrix<Ty2, R, C> const& mat2)
 {
 	Matrix<decltype(mat1[0] * mat2[0]), R, C> res;
 	for (std::uint16_t i = 0u; i < R * C; i++)
@@ -233,7 +233,7 @@ constexpr auto NtHadamard(Matrix<Ty1, R, C> const& mat1, Matrix<Ty2, R, C> const
 
 // Transpose of matrix
 template<class Ty, std::uint8_t R, std::uint8_t C>
-constexpr auto NtTranspose(Matrix<Ty, R, C> const& mat)
+constexpr auto Transpose(Matrix<Ty, R, C> const& mat)
 {
 	Matrix<Ty, C, R> res;
 	for (std::uint8_t j = 0u; j < R; j++)

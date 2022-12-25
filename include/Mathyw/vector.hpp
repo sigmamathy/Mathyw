@@ -158,7 +158,7 @@ constexpr auto operator/(Vector<Ty, Sz> const& vec, STy scale)
 
 // Dot product of two vectors
 template<class Ty1, class Ty2, std::uint8_t Sz>
-constexpr auto NtDot(Vector<Ty1, Sz> const& vec1, Vector<Ty2, Sz> const& vec2)
+constexpr auto Dot(Vector<Ty1, Sz> const& vec1, Vector<Ty2, Sz> const& vec2)
 {
 	decltype(vec1[0] * vec2[0]) res = 0;
 	for (std::uint8_t i = 0u; i < Sz; i++)
@@ -168,14 +168,14 @@ constexpr auto NtDot(Vector<Ty1, Sz> const& vec1, Vector<Ty2, Sz> const& vec2)
 
 // Cross product of two vectors (2 dimensional)
 template<class Ty1, class Ty2>
-constexpr auto NtCross(Vector<Ty1, 2> const& vec1, Vector<Ty2, 2> const& vec2)
+constexpr auto Cross(Vector<Ty1, 2> const& vec1, Vector<Ty2, 2> const& vec2)
 {
 	return vec1[0] * vec2[1] - vec1[1] * vec2[0];
 }
 
 // Cross product of two vectors (3 dimensional)
 template<class Ty1, class Ty2>
-constexpr auto NtCross(Vector<Ty1, 3> const& vec1, Vector<Ty2, 3> const& vec2)
+constexpr auto Cross(Vector<Ty1, 3> const& vec1, Vector<Ty2, 3> const& vec2)
 {
 	return Vector<decltype(vec1[0] * vec2[0]), 3>(
 		vec1[1] * vec2[2] - vec1[2] * vec2[1],
@@ -186,7 +186,7 @@ constexpr auto NtCross(Vector<Ty1, 3> const& vec1, Vector<Ty2, 3> const& vec2)
 
 // Hadamard product of vectors
 template<class Ty1, class Ty2, std::uint8_t Sz>
-constexpr auto NtHadamard(Vector<Ty1, Sz> const& vec1, Vector<Ty2, Sz> const& vec2)
+constexpr auto Hadamard(Vector<Ty1, Sz> const& vec1, Vector<Ty2, Sz> const& vec2)
 {
 	return (Vector<decltype(vec1[0] * vec2[0]), Sz>)
 		NtHadamard((Matrix<Ty1, Sz, 1>) vec1, vec2);
@@ -194,7 +194,7 @@ constexpr auto NtHadamard(Vector<Ty1, Sz> const& vec1, Vector<Ty2, Sz> const& ve
 
 // Normalize a vector
 template<class Ty, std::uint8_t Sz>
-constexpr auto NtNormalize(Vector<Ty, Sz> const& vec)
+constexpr auto Normalize(Vector<Ty, Sz> const& vec)
 {
 	using common_type = std::common_type_t<Ty, float>;
 	Ty sum = 0;
