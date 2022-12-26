@@ -42,11 +42,11 @@
 #endif
 
 #ifdef MATHYW_DEBUG // Minimal check on debug
-#define MATHYW_ASSERT(x, ...) if (!(x)) throw std::exception(__VA_ARGS__)
-#define MATHYW_VERIFY(x, ...) MATHYW_ASSERT(x, __VA_ARGS__)
+#define MATHYW_ASSERT(x, str) if (!(x)) { std::string _ = str; throw std::exception(_.c_str()); }
+#define MATHYW_VERIFY(x, str) MATHYW_ASSERT(x, str)
 #else // No check on release
-#define MATHYW_ASSERT(x, ...)
-#define MATHYW_VERIFY(x, ...) x
+#define MATHYW_ASSERT(...)
+#define MATHYW_VERIFY(x, str) x
 #endif
 
 // Mathyw C++ standard libraries dependencies
@@ -58,6 +58,7 @@
 #include <functional>
 #include <iostream>
 #include <type_traits>
+#include <concepts>
 #include <cmath>
 
 namespace Mathyw {
@@ -65,5 +66,13 @@ namespace Mathyw {
 // Success if such type is an arithemtic type (primary data types)
 template<class Ty>
 concept ArithmeticType = std::is_arithmetic_v<Ty>;
+
+// Success if such type is a container type (std::array, std::vector etc.)
+// requires operator[](int) and size() -> std::size_t defined
+template<class Ty>
+concept ContainerType = requires (Ty type) {
+	type[0];
+	{ type.size() } -> std::same_as<std::size_t>;
+};
 
 } // !Mathyw

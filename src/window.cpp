@@ -73,7 +73,7 @@ static void SetupWindowHints(std::uint8_t hint)
 	glfwWindowHint(GLFW_MAXIMIZED,		(bool)(hint & WindowMaximized));
 }
 
-Window::Window(int width, int height, std::string_view title, std::uint8_t hint)
+Window::Window(int width, int height, std::string const& title, std::uint8_t hint)
 {
 	data.size = Ivec2(width, height);
 	data.title = title;
@@ -84,8 +84,7 @@ Window::Window(int width, int height, std::string_view title, std::uint8_t hint)
 
 	InitGL();
 	SetupWindowHints(hint);
-	std::string st(title);
-	window = glfwCreateWindow(width, height, st.c_str(), nullptr, nullptr);
+	window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
 	GLFWwindow* glwin = (GLFWwindow*) window;
 	glfwMakeContextCurrent(glwin);
 	gladLoadGL();
@@ -179,10 +178,9 @@ void Window::Size(Ivec2 size)
 	data.size = size;
 }
 
-void Window::Title(std::string_view title)
+void Window::Title(std::string const& title)
 {
-	std::string st(title);
-	glfwSetWindowTitle((GLFWwindow*) window, st.c_str());
+	glfwSetWindowTitle((GLFWwindow*) window, title.c_str());
 	data.title = title;
 }
 

@@ -10,7 +10,7 @@ add_library(${PROJECT_NAME}
     "src/opengl.cpp"
     "src/monitor.cpp"
     "src/window.cpp"
-)
+ "src/clock.cpp" "src/vertex_array.cpp" "src/shader.cpp")
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
 
@@ -36,6 +36,7 @@ if (NOT EXISTS "${PROJECT_SOURCE_DIR}/external/glfw/CMakeLists.txt")
 endif()
 
 # Add external submodules
+set(GLFW_BUILD_DOCS OFF)
 add_subdirectory("external/glfw")
 
 # Include directories

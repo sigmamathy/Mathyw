@@ -43,7 +43,7 @@ public:
 	// @param width, height: the size of the window
 	// @param title: the title of the window
 	// @param hint: expects window hints defined above
-	Window(int width, int height, std::string_view title, std::uint8_t hint = WindowDefault);
+	Window(int width, int height, std::string const& title, std::uint8_t hint = WindowDefault);
 
 	// Fullscreen initialization
 	// @param monitor: specify which monitor will the fullscreen window be
@@ -93,7 +93,7 @@ public:
 	// Setters of window data
 	void Position(Ivec2 position);
 	void Size(Ivec2 size);
-	void Title(std::string_view title);
+	void Title(std::string const& title);
 	void Viewport(Ivec4 viewport);
 
 	// Set window event callback
