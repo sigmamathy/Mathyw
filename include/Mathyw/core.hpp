@@ -42,7 +42,7 @@
 #endif
 
 #ifdef MATHYW_DEBUG // Minimal check on debug
-#define MATHYW_ASSERT(x, str) if (!(x)) { std::string _ = str; throw std::exception(_.c_str()); }
+#define MATHYW_ASSERT(x, str) if (!(x)) throw std::logic_error(str)
 #define MATHYW_VERIFY(x, str) MATHYW_ASSERT(x, str)
 #else // No check on release
 #define MATHYW_ASSERT(...)
@@ -60,6 +60,7 @@
 #include <type_traits>
 #include <concepts>
 #include <cmath>
+#include <stdexcept>
 
 namespace Mathyw {
 
