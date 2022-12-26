@@ -6,11 +6,14 @@ add_library(${PROJECT_NAME}
 # glad.c dependencies
     "external/glad/glad.c"
 # source files
-    
     "src/opengl.cpp"
     "src/monitor.cpp"
     "src/window.cpp"
- "src/clock.cpp" "src/vertex_array.cpp" "src/shader.cpp")
+    "src/clock.cpp"
+    "src/vertex_array.cpp"
+    "src/shader.cpp"
+    "src/transformation.cpp"
+)
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
 

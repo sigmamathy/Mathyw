@@ -2,6 +2,7 @@
 #include <Mathyw/clock.hpp>
 #include <Mathyw/vertex_array.hpp>
 #include <Mathyw/shader.hpp>
+#include <Mathyw/transformation.hpp>
 
 void EventCallback(Mathyw::Window& window, Mathyw::Event const& e)
 {
@@ -20,6 +21,7 @@ static const char* vshader = R"(
 #version 330 core
 
 layout (location = 0) in vec2 ipos;
+uniform mat4 u_model, u_proj;
 
 void main() {
 	gl_Position = u_proj * u_model * vec4(ipos, 0.0f, 1.0f);
@@ -56,10 +58,12 @@ int main(int argc, char** argv)
 	Mathyw::Window window(1600, 900, "Hello World");
 	window.EventCallback(EventCallback);
 
-	Mathyw::VertexArray vao(6);
+	Mathyw::VertexArray vao(4);
 	vao.LinkVBO(vertices, Mathyw::VertexLayout(2));
 	vao.LinkIBO(indices);
 	Mathyw::Shader shader(vshader, fshader);
+	shader.Uniform("u_model", Mathyw::Scale(Mathyw::Fvec3(50.0f)));
+	shader.Uniform("u_proj", Mathyw::OrthogonalProjection(window.Size()));
 
 	Mathyw::Clock clock;
 
