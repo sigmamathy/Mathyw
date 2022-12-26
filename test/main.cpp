@@ -1,11 +1,25 @@
-#include <Mathyw/vector.hpp>
+#include <Mathyw/window.hpp>
+
+void EventCallback(Mathyw::Window& window, Mathyw::Event const& e)
+{
+	if (Mathyw::EventCast<Mathyw::WindowClosedEvent>(e))
+		window.Close();
+
+	if (auto* ke = Mathyw::EventCast<Mathyw::KeyEvent>(e))
+	{
+		if (ke->down)
+			std::cout << ke->keycode << '\n';
+	}
+}
 
 int main(int argc, char** argv)
 {
-	
-	Mathyw::Fvec2 v1 = { 2, 3 }, v2 = { 5, 6 };
-	std::cout << (v1 + v2).Get(1, 1, 0) << '\n';
+	Mathyw::Window window(1600, 900, "Hello World");
+	window.EventCallback(EventCallback);
 
+	while (window.Active()) {
+		window.Update();
+	}
 	
 	return 0;
 }

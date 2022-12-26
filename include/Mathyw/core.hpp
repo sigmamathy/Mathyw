@@ -51,6 +51,7 @@
 
 // Mathyw C++ standard libraries dependencies
 #include <string>
+#include <string_view>
 #include <array>
 #include <vector>
 #include <unordered_map>
