@@ -13,7 +13,7 @@ add_library(${PROJECT_NAME}
     "src/vertex_array.cpp"
     "src/shader.cpp"
     "src/transformation.cpp"
-)
+ "src/value_tracker.cpp")
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
 

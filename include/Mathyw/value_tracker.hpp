@@ -77,4 +77,4 @@ private:
 	std::vector<Task> tasklist;
 };
 
-}
+} // !Mathyw
