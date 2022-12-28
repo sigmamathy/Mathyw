@@ -16,6 +16,7 @@ add_library(${PROJECT_NAME}
     "src/transformation.cpp"
     "src/value_tracker.cpp"
     "src/texture.cpp"
+    "src/font.cpp"
 )
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
@@ -44,23 +45,21 @@ endif()
 # Add external submodules
 set(GLFW_BUILD_DOCS OFF)
 add_subdirectory("external/glfw")
+add_subdirectory("external/freetype")
 
 # Include directories
 target_include_directories(${PROJECT_NAME}
     PUBLIC "external/glfw/include"
     PUBLIC "external/glad/include"
     PUBLIC "external/stb/include"
+    PUBLIC "external/freetype/include"
     PUBLIC "include"
-)
-
-# Link directories
-target_link_directories(${PROJECT_NAME}
-    PRIVATE "external/glfw"
 )
 
 # Link libraries
 target_link_libraries(${PROJECT_NAME}
-    "glfw"
+    glfw
+    freetype
 )
 
 # Create c++ library test

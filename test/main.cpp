@@ -1,8 +1,4 @@
-#include <Mathyw/window.hpp>
-#include <Mathyw/clock.hpp>
-#include <Mathyw/vertex_array.hpp>
-#include <Mathyw/shader.hpp>
-#include <Mathyw/transformation.hpp>
+#include <Mathyw/all.hpp>
 
 void EventCallback(Mathyw::Window& window, Mathyw::Event const& e)
 {
