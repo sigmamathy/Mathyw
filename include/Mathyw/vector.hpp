@@ -189,7 +189,7 @@ template<class Ty1, class Ty2, std::uint8_t Sz>
 constexpr auto Hadamard(Vector<Ty1, Sz> const& vec1, Vector<Ty2, Sz> const& vec2)
 {
 	return (Vector<decltype(vec1[0] * vec2[0]), Sz>)
-		NtHadamard((Matrix<Ty1, Sz, 1>) vec1, vec2);
+		Hadamard((Matrix<Ty1, Sz, 1>) vec1, vec2);
 }
 
 // Normalize a vector

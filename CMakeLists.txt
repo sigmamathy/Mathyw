@@ -5,6 +5,7 @@ project (Mathyw VERSION 1.0)
 add_library(${PROJECT_NAME}
 # glad.c dependencies
     "external/glad/glad.c"
+    "external/stb/stb_image.c"
 # source files
     "src/opengl.cpp"
     "src/monitor.cpp"
@@ -13,7 +14,9 @@ add_library(${PROJECT_NAME}
     "src/vertex_array.cpp"
     "src/shader.cpp"
     "src/transformation.cpp"
- "src/value_tracker.cpp")
+    "src/value_tracker.cpp"
+    "src/texture.cpp"
+)
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
 
@@ -46,6 +49,7 @@ add_subdirectory("external/glfw")
 target_include_directories(${PROJECT_NAME}
     PUBLIC "external/glfw/include"
     PUBLIC "external/glad/include"
+    PUBLIC "external/stb/include"
     PUBLIC "include"
 )
 
@@ -63,4 +67,10 @@ target_link_libraries(${PROJECT_NAME}
 option(MATHYW_BUILDTEST "Build Mathyw test" OFF)
 if (MATHYW_BUILDTEST)
     add_subdirectory("test")
+endif()
+
+# Build Mathyw examples
+option(MATHYW_BUILDEXAMPLES "Build Mathyw examples" OFF)
+if (MATHYW_BUILDEXAMPLES)
+    add_subdirectory("examples")
 endif()
