@@ -10,7 +10,7 @@ class Shader
 {
 public:
 	// Initialize with a shader source (vertex shader and fragment shader)
-	Shader(std::string_view vertex, std::string_view fragment);
+	Shader(std::string const& vertex, std::string const& fragment);
 
 	// No copy construct allowed (use move instead)
 	Shader(Shader const&) = delete;
@@ -23,6 +23,12 @@ public:
 
 	// Destructor
 	~Shader();
+
+	// Return true if no error occurred
+	inline operator bool() const { return good; }
+
+	// The error message OpenGL reported, empty if no errors
+	inline std::string_view ErrorMessage() const { return err_message; }
 
 	// Specify which shader to use
 	// @param shader: could be nullptr if no shader are used
@@ -59,7 +65,8 @@ public:
 protected:
 	std::uint32_t shaderid;
 	std::unordered_map<std::string, int> uniform_location_cache;
-	bool destruct_this;
+	bool good, destruct_this;
+	std::string err_message;
 
 	// Returns the location of the uniform
 	int UniformLocation(std::string const& name);

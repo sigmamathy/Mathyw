@@ -5,11 +5,10 @@
 
 namespace Mathyw {
 
-static unsigned create_shader(unsigned type, std::string_view src)
+static unsigned create_shader(unsigned type, std::string const& src, bool& good, std::string& err_message)
 {
 	auto shader = glCreateShader(type);
-	std::string str(src);
-	const char* cstr = str.c_str();
+	const char* cstr = src.c_str();
 	glShaderSource(shader, 1, &cstr, nullptr);
 	glCompileShader(shader);
 	int status;
@@ -19,17 +18,20 @@ static unsigned create_shader(unsigned type, std::string_view src)
 		std::string buffer;
 		buffer.resize(512);
 		glGetShaderInfoLog(shader, 512, NULL, &buffer[0]);
-		// ShaderException("OpenGL reported following shader errors:\n" + buffer).Invoke();
+		good = false;
+		err_message += "Following error found in "
+			+ std::string(type == GL_VERTEX_SHADER ? "vertex shader:\n" : "fragment shader:\n") + buffer;
 	}
 	return shader;
 }
 
-Shader::Shader(std::string_view vertex, std::string_view fragment)
+Shader::Shader(std::string const& vertex, std::string const& fragment)
 {
 	shaderid = glCreateProgram();
 	destruct_this = true;
-	unsigned int vshader = create_shader(GL_VERTEX_SHADER, vertex);
-	unsigned int fshader = create_shader(GL_FRAGMENT_SHADER, fragment);
+	good = true;
+	unsigned int vshader = create_shader(GL_VERTEX_SHADER, vertex, good, err_message);
+	unsigned int fshader = create_shader(GL_FRAGMENT_SHADER, fragment, good, err_message);
 	glAttachShader(shaderid, vshader);
 	glAttachShader(shaderid, fshader);
 	glLinkProgram(shaderid);
@@ -38,25 +40,24 @@ Shader::Shader(std::string_view vertex, std::string_view fragment)
 }
 
 Shader::Shader(Shader&& shader) noexcept
-	: shaderid(shader.shaderid), uniform_location_cache(shader.uniform_location_cache), destruct_this(true)
+	: good(shader.good), shaderid(shader.shaderid), uniform_location_cache(shader.uniform_location_cache), destruct_this(true)
 {
 	shader.destruct_this = false;
 }
 
-static bool ReadFile(std::string const& file, std::string& output)
+static void ReadFile(std::string const& file, std::string& output)
 {
 	std::ifstream ifs(file);
 	MATHYW_ASSERT(ifs.is_open(), "Cannot open file \"" + file + "\"");
 	std::string line;
 	while (getline(ifs, line))
 		output += line + '\n';
-	return true;
 }
 
 Shader ReadShaderFile(std::string const& vertex, std::string const& fragment)
 {
 	std::string vsrc, fsrc;
-	ReadFile(vertex, vsrc);
+	ReadFile(vertex, vsrc), ReadFile(fragment, fsrc);
 	return Shader(vsrc, fsrc);
 }
 
