@@ -127,4 +127,23 @@ private:
 	bool destruct_this;
 };
 
+// OpenGL capabilities
+enum : std::uint32_t
+{
+	Blend			= 1 << 0,
+	DepthTest		= 1 << 1,
+	CullFace		= 1 << 2,
+	StencilTest		= 1 << 3,
+	ScissorTest		= 1 << 4
+};
+
+// Enable the capabilities
+void Enable(unsigned caps);
+
+// Disable the capabilities
+void Disable(unsigned caps);
+
+// Returns bitwise OR of masks that indicate which capability is enabled
+std::uint32_t Capabilities();
+
 }

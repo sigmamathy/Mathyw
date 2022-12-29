@@ -113,7 +113,6 @@ Window::Window(Monitor monitor, std::uint8_t hint)
 	gladLoadGL();
 	glfwSetWindowUserPointer(glwin, &data);
 	glViewport(0, 0, monitor.Size()[0], monitor.Size()[1]);
-	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	CreateWindowEventCallback(glwin);
 }
@@ -164,7 +163,10 @@ void Window::Clear(Fvec4 color)
 {
 	Bind(this);
 	glClearColor(color[0], color[1], color[2], color[3]);
-	glClear(GL_COLOR_BUFFER_BIT);
+	GLbitfield bf = GL_COLOR_BUFFER_BIT;
+	if (Capabilities() & DepthTest) bf |= GL_DEPTH_BUFFER_BIT;
+	if (Capabilities() & StencilTest) bf |= GL_STENCIL_BUFFER_BIT;
+	glClear(bf);
 }
 
 void Window::Position(Ivec2 position)
@@ -218,5 +220,38 @@ Ivec2 Window::MousePosition() const
 	glfwGetCursorPos((GLFWwindow*) window, &x, &y);
 	return Ivec2(x, y);
 }
+
+#define MATHYW_ENABLE_TEST(cap, oglcap) if (caps & cap) glEnable(oglcap)
+#define MATHYW_DISABLE_TEST(cap, oglcap) if (caps & cap) glDisable(oglcap)
+
+static std::uint32_t opengl_capibilities;
+
+void Enable(unsigned caps)
+{
+	opengl_capibilities |= caps;
+	MATHYW_ENABLE_TEST(Blend, GL_BLEND);
+	MATHYW_ENABLE_TEST(DepthTest, GL_DEPTH_TEST);
+	MATHYW_ENABLE_TEST(CullFace, GL_CULL_FACE);
+	MATHYW_ENABLE_TEST(StencilTest, GL_STENCIL_TEST);
+	MATHYW_ENABLE_TEST(ScissorTest, GL_SCISSOR_TEST);
+}
+
+void Disable(unsigned caps)
+{
+	opengl_capibilities &= ~caps;
+	MATHYW_DISABLE_TEST(Blend, GL_BLEND);
+	MATHYW_DISABLE_TEST(DepthTest, GL_DEPTH_TEST);
+	MATHYW_DISABLE_TEST(CullFace, GL_CULL_FACE);
+	MATHYW_DISABLE_TEST(StencilTest, GL_STENCIL_TEST);
+	MATHYW_DISABLE_TEST(ScissorTest, GL_SCISSOR_TEST);
+}
+
+std::uint32_t Capabilities()
+{
+	return opengl_capibilities;
+}
+
+#undef MATHYW_ENABLE_TEST
+#undef MATHYW_DISABLE_TEST
 
 } // !Mathyw
