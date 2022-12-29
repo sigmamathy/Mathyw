@@ -78,6 +78,7 @@ Window::Window(int width, int height, std::string const& title, std::uint8_t hin
 	data.size = Ivec2(width, height);
 	data.title = title;
 	data.active = true;
+	data.has_vsync = false;
 	data.callback = [&](const Event& e) -> void { if (EventCast<WindowClosedEvent>(e)) Close(); };
 	data.viewport = { 0.0f, 0.0f, width, height };
 	destruct_this = true;
@@ -188,6 +189,12 @@ void Window::Viewport(Ivec4 viewport)
 {
 	glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
 	data.viewport = viewport;
+}
+
+void Window::Vsync(bool enable)
+{
+	glfwSwapInterval(enable);
+	data.has_vsync = enable;
 }
 
 void Window::EventCallback(std::function<void(Window&, Event const&)> const& callback)

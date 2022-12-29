@@ -51,8 +51,9 @@ static constexpr std::array<unsigned, 6> indices = {
 
 int main(int argc, char** argv)
 {
-	Mathyw::Window window(1600, 900, "Hello World");
+	Mathyw::Window window(1600, 900, "Hello World", Mathyw::WindowDefault ^ Mathyw::WindowResizable);
 	window.EventCallback(EventCallback);
+	window.Vsync(true);
 
 	Mathyw::VertexArray vao(4);
 	vao.LinkVBO(vertices, Mathyw::VertexLayout(2));
@@ -66,7 +67,8 @@ int main(int argc, char** argv)
 	while (window.Active())
 	{
 		float elapsed = clock.Restart();
-		window.Title("Hello World - FPS: " + std::to_string(1.0f / elapsed));
+
+		window.Title("Hello World - FPS: " + std::to_string((int)(1.0f / elapsed)));
 		window.Clear(Mathyw::Fvec4(0.07f, 0.13f, 0.17f, 1.0f));
 
 		shader.Bind();

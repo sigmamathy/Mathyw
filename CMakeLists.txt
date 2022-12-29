@@ -3,7 +3,7 @@ cmake_minimum_required (VERSION 3.18.0)
 project (Mathyw VERSION 1.0)
 
 add_library(${PROJECT_NAME}
-# glad.c dependencies
+# dependencies
     "external/glad/glad.c"
     "external/stb/stb_image.c"
 # source files

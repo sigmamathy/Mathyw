@@ -30,7 +30,7 @@ struct WindowData final
 {
 	Ivec2 position, size;
 	std::string title;
-	bool active;
+	bool active, has_vsync;
 	std::function<void(Event const&)> callback;
 	Ivec4 viewport;
 };
@@ -86,6 +86,7 @@ public:
 	inline Ivec2 Size() const { return data.size; }
 	inline std::string_view Title() const { return data.title; }
 	inline Ivec4 Viewport() const { return data.viewport; }
+	inline bool Vsync() const { return data.has_vsync; }
 
 	// Returns false if window is closed, or Close() is called
 	inline bool Active() const { return data.active; }
@@ -95,6 +96,7 @@ public:
 	void Size(Ivec2 size);
 	void Title(std::string const& title);
 	void Viewport(Ivec4 viewport);
+	void Vsync(bool enable);
 
 	// Set window event callback
 	void EventCallback(std::function<void(Window&, Event const&)> const& callback);

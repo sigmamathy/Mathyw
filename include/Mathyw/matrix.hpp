@@ -11,6 +11,7 @@ class Matrix
 {
 public:
 	// Matrix size constant
+	using ElementType = Ty;
 	static constexpr std::uint8_t Row = R, Column = C;
 	static constexpr std::uint16_t Size = R * C;
 	// Rows and column should never be zero.

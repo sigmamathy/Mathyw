@@ -11,6 +11,8 @@ class Vector : public Matrix<Ty, Sz, 1>
 {
 public:
 	// Inherit super functions
+	using ElementType = Ty;
+	static constexpr std::uint8_t Row = Sz, Column = 1;
 	static constexpr std::uint8_t Size = Sz;
 	using Matrix<Ty, Sz, 1>::Matrix;
 	using Matrix<Ty, Sz, 1>::operator[];
@@ -114,46 +116,57 @@ std::ostream& operator<<(std::ostream& os, Vector<Ty, Sz> const& vec)
 template<class Ty1, class Ty2, std::uint8_t Sz>
 constexpr auto operator+(Vector<Ty1, Sz> const& vec1, Vector<Ty2, Sz> const& vec2)
 {
-	return Vector<decltype(vec1[0] + vec2[0]), Sz>(
-		(Matrix<Ty1, Sz, 1>) vec1 + vec2
-		);
+	Vector<decltype(vec1[0] + vec2[0]), Sz> res;
+	for (std::uint8_t i = 0u; i < Sz; i++)
+		res[i] = vec1[i] + vec2[i];
+	return res;
 }
 
 // Subtract two vectors, operator overloaded
 template<class Ty1, class Ty2, std::uint8_t Sz>
 constexpr auto operator-(Vector<Ty1, Sz> const& vec1, Vector<Ty2, Sz> const& vec2)
 {
-	return Vector<decltype(vec1[0] - vec2[0]), Sz>(
-		(Matrix<Ty1, Sz, 1>) vec1 - vec2
-		);
+	Vector<decltype(vec1[0] - vec2[0]), Sz> res;
+	for (std::uint8_t i = 0u; i < Sz; i++)
+		res[i] = vec1[i] - vec2[i];
+	return res;
 }
 
 // Negate vector, operator overloaded
 template<class Ty, std::uint8_t Sz>
 constexpr auto operator-(Vector<Ty, Sz> const& vec)
 {
-	return decltype(vec) (-(Matrix<Ty, Sz, 1>) vec);
+	Vector<Ty, Sz> res;
+	for (std::uint8_t i = 0u; i < Sz; i++)
+		res[i] = -vec[i];
+	return res;
 }
 
 // Scaler multiplication of vector, operator overloaded
 template<class Ty, ArithmeticType STy, std::uint8_t Sz>
 constexpr auto operator*(Vector<Ty, Sz> const& vec, STy scale)
 {
-	return (Matrix<Ty, Sz, 1>) vec * scale;
+	Vector<decltype(vec[0] * scale), Sz> res;
+	for (std::uint8_t i = 0u; i < Sz; i++)
+		res[i] = vec[i] * scale;
+	return res;
 }
 
 // Scaler multiplication of vector, operator overloaded
 template<class Ty, ArithmeticType STy, std::uint8_t Sz>
 constexpr auto operator*(STy scale, Vector<Ty, Sz> const& vec)
 {
-	return scale * (Matrix<Ty, Sz, 1>) vec;
+	return vec * scale;
 }
 
 // Scaler multiplication of vector with division, operator overloaded
 template<class Ty, ArithmeticType STy, std::uint8_t Sz>
 constexpr auto operator/(Vector<Ty, Sz> const& vec, STy scale)
 {
-	return (Matrix<Ty, Sz, 1>) vec / scale;
+	Vector<decltype(vec[0] * scale), Sz> res;
+	for (std::uint8_t i = 0u; i < Sz; i++)
+		res[i] = vec[i] / scale;
+	return res;
 }
 
 // Dot product of two vectors
@@ -177,19 +190,22 @@ constexpr auto Cross(Vector<Ty1, 2> const& vec1, Vector<Ty2, 2> const& vec2)
 template<class Ty1, class Ty2>
 constexpr auto Cross(Vector<Ty1, 3> const& vec1, Vector<Ty2, 3> const& vec2)
 {
-	return Vector<decltype(vec1[0] * vec2[0]), 3>(
+	return Vector<decltype(vec1[0] * vec2[0]), 3>
+	{
 		vec1[1] * vec2[2] - vec1[2] * vec2[1],
 		vec1[2] * vec2[0] - vec1[0] * vec2[2],
 		vec1[0] * vec2[1] - vec1[1] * vec2[0]
-		);
+	};
 }
 
 // Hadamard product of vectors
 template<class Ty1, class Ty2, std::uint8_t Sz>
 constexpr auto Hadamard(Vector<Ty1, Sz> const& vec1, Vector<Ty2, Sz> const& vec2)
 {
-	return (Vector<decltype(vec1[0] * vec2[0]), Sz>)
-		Hadamard((Matrix<Ty1, Sz, 1>) vec1, vec2);
+	Vector<decltype(vec1[0] * vec2[0]), Sz> res;
+	for (std::uint8_t i = 0u; i < Sz; i++)
+		res[i] = vec1[i] * vec2[i];
+	return res;
 }
 
 // Normalize a vector
@@ -200,7 +216,7 @@ constexpr auto Normalize(Vector<Ty, Sz> const& vec)
 	Ty sum = 0;
 	for (std::uint8_t i = 0u; i < Sz; i++)
 		sum += vec[i] * vec[i];
-	auto invsqrt = (common_type) 1.0f / Power(float(sum), 0.5f);
+	auto invsqrt = (common_type) 1.0f / std::sqrt(float(sum));
 	Vector<common_type, Sz> res;
 	for (std::uint8_t i = 0u; i < Sz; i++)
 		res[i] = vec[i] * invsqrt;
