@@ -81,6 +81,7 @@ Window::Window(int width, int height, std::string const& title, std::uint8_t hin
 	data.has_vsync = false;
 	data.callback = [&](const Event& e) -> void { if (EventCast<WindowClosedEvent>(e)) Close(); };
 	data.viewport = { 0.0f, 0.0f, width, height };
+	data.cursor_mode = WindowCursorMode::Normal;
 	destruct_this = true;
 
 	InitGL();
@@ -103,6 +104,7 @@ Window::Window(Monitor monitor, std::uint8_t hint)
 	data.active = true;
 	data.callback = [&](const Event& e) -> void { if (EventCast<WindowClosedEvent>(e)) Close(); };
 	data.viewport = { 0.0f, 0.0f, monitor.Size()[0], monitor.Size()[1] };
+	data.cursor_mode = WindowCursorMode::Normal;
 	destruct_this = true;
 
 	InitGL();
@@ -199,10 +201,47 @@ void Window::Vsync(bool enable)
 	data.has_vsync = enable;
 }
 
+void Window::CursorMode(WindowCursorMode mode)
+{
+	data.cursor_mode = mode;
+	glfwSetInputMode((GLFWwindow*) window, GLFW_CURSOR, (int)mode);
+}
+
 void Window::EventCallback(std::function<void(Window&, Event const&)> const& callback)
 {
 	data.callback = [&, callback](Event const& e) -> void { callback(*this, e); };
 }
+
+namespace {
+	struct OpenGLCursor
+	{
+		GLFWcursor* ptr;
+		OpenGLCursor(WindowCursor cursor){
+			ptr = glfwCreateStandardCursor((int)cursor);
+		}
+		~OpenGLCursor(){
+			glfwDestroyCursor(ptr);
+		}
+	};
+}
+
+#define MATHYW_CURSOR_CASE(x) case x: { static OpenGLCursor cur(x); glfwSetCursor((GLFWwindow*) window, cur.ptr); break; }
+
+void Window::CursorLook(WindowCursor cursor)
+{
+	switch (cursor)
+	{
+		using enum WindowCursor;
+		MATHYW_CURSOR_CASE(Arrow);
+		MATHYW_CURSOR_CASE(Ibeam);
+		MATHYW_CURSOR_CASE(CrossHair);
+		MATHYW_CURSOR_CASE(Hand);
+		MATHYW_CURSOR_CASE(HResize);
+		MATHYW_CURSOR_CASE(VResize);
+	}
+}
+
+#undef MATHYW_CURSOR_CASE
 
 bool Window::IsKeyPressed(KeyCode keycode) const
 {

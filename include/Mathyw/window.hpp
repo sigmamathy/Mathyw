@@ -25,6 +25,21 @@ enum : std::uint8_t
 				  | WindowAutoIconify
 };
 
+// List of window cursor mode
+enum class WindowCursorMode : std::uint32_t {
+	Normal = 0x34001, Hidden = 0x34002, Disable = 0x34003
+};
+
+// List of standard cursor available
+enum class WindowCursor : std::uint32_t {
+	Arrow		= 0x36001,
+	Ibeam		= 0x36002,
+	CrossHair	= 0x36003,
+	Hand		= 0x36004,
+	HResize		= 0x36005,
+	VResize		= 0x36006,
+};
+
 // Contains window data
 struct WindowData final
 {
@@ -33,6 +48,7 @@ struct WindowData final
 	bool active, has_vsync;
 	std::function<void(Event const&)> callback;
 	Ivec4 viewport;
+	WindowCursorMode cursor_mode;
 };
 
 // Manage and control window
@@ -87,6 +103,7 @@ public:
 	inline std::string_view Title() const { return data.title; }
 	inline Ivec4 Viewport() const { return data.viewport; }
 	inline bool Vsync() const { return data.has_vsync; }
+	inline WindowCursorMode CursorMode() const { return data.cursor_mode; }
 
 	// Returns false if window is closed, or Close() is called
 	inline bool Active() const { return data.active; }
@@ -97,6 +114,7 @@ public:
 	void Title(std::string const& title);
 	void Viewport(Ivec4 viewport);
 	void Vsync(bool enable);
+	void CursorMode(WindowCursorMode mode);
 
 	// Set window event callback
 	void EventCallback(std::function<void(Window&, Event const&)> const& callback);
@@ -110,6 +128,9 @@ public:
 			callback(win, e, params...);
 		});
 	}
+
+	// Change cursor look
+	void CursorLook(WindowCursor cursor);
 
 	// Returns true if specific key is being pressed
 	bool IsKeyPressed(KeyCode keycode) const;
