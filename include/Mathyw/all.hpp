@@ -1,5 +1,6 @@
 #pragma once
 
+// Core headers
 #include "./clock.hpp"
 #include "./core.hpp"
 #include "./event.hpp"
@@ -16,3 +17,6 @@
 #include "./vector.hpp"
 #include "./vertex_array.hpp"
 #include "./window.hpp"
+
+// Headers for developer
+#include "./developer_menu.hpp"

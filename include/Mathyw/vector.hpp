@@ -58,7 +58,8 @@ public:
 	constexpr auto Get(Tys... indices) const
 	{
 		Vector<Ty, sizeof...(Tys)> res;
-		std::array<std::uint8_t, sizeof...(Tys)> const inds = { indices... };
+		std::array<std::uint8_t, sizeof...(Tys)> const inds
+			= { static_cast<std::uint8_t>(indices)... };
 		for (std::uint8_t i = 0u; i < sizeof...(Tys); i++)
 			res[i] = Get(inds[i]);
 		return res;

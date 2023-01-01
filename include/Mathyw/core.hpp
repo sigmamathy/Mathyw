@@ -61,6 +61,7 @@
 #include <concepts>
 #include <cmath>
 #include <stdexcept>
+#include <memory>
 
 namespace Mathyw {
 
