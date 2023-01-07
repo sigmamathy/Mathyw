@@ -17,6 +17,3 @@
 #include "./vector.hpp"
 #include "./vertex_array.hpp"
 #include "./window.hpp"
-
-// Headers for developer
-#include "./developer_menu.hpp"
